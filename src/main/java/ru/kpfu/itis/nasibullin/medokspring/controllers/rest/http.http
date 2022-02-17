@@ -1,0 +1,35 @@
+GET http://localhost:8080/rest/product/1
+
+###
+
+GET http://localhost:8080/rest/product/liquid
+
+###
+
+PUT http://localhost:8080/rest/product/
+Content-Type: application/json
+
+{
+  "name": "TestProduct",
+  "description": "Test description",
+  "remaining": 5,
+  "size": 2.5,
+  "price": 1000
+}
+
+###
+
+DELETE http://localhost:8080/rest/product/2
+
+###
+
+POST http://localhost:8080/rest/product/3
+Content-Type: application/json
+
+{
+  "name": "New name",
+  "description": "New Description",
+  "remaining": 2
+}
+
+###

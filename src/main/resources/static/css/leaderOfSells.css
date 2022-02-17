@@ -1,0 +1,26 @@
+.leaders{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.leader__element__img img{
+    max-width: 200px;
+    height: 200px;
+}
+
+.leader__element{
+    border: 1px solid orange;
+    width: 250px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 10px;
+    margin: 20px 15px;
+}
+.leader__element:hover{
+    background-color: #fef0d5;
+}

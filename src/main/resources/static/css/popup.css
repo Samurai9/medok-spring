@@ -1,0 +1,19 @@
+.form-popup, .form-popup_fail, .form-popup_success {
+    display: none;
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    background-color: lightgreen;
+    border: 1px solid orange;
+    border-radius: 10px;
+    padding: 0px 10px;
+    opacity: 0;
+}
+
+.form-popup_fail{
+    background-color: lightcoral;
+}
+
+.form-popup_success{
+    background-color: lightgreen;
+}

@@ -1,0 +1,35 @@
+.basket{
+    display: flex;
+    flex-direction: row;
+    padding: 15px 0;
+}
+.basket__products__inner{
+    width: 80%;
+}
+.basket__products__empty{
+    font-size: 20px;
+}
+.basket__info{
+    font-size: 20px;
+    margin-top: 20px;
+    width: 20%;
+    border: 1px solid orange;
+    border-radius: 15px;
+    padding: 0px 15px;
+    height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.product__element__basket{
+    width: 90%;
+}
+.basket__info__total__products, .basket__info__total_price, .basket__info__buy{
+    margin-top: 10px;
+}
+#buy{
+    width: 150px;
+    height: 80px;
+}

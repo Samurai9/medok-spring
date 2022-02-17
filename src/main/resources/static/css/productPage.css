@@ -1,0 +1,88 @@
+.product__page{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 5%;
+}
+
+.product__page__header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.product__page__header__img{
+    width: 265px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.product__page__header__img img{
+    width: 100%;
+}
+.product__page__header__info__name, .product__page__header__buy__price{
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.product__page__header__info__size, .product__page__header__info__remainig{
+    margin: 5px 0;
+    font-size: 20px;
+}
+
+.product__page__header__buy__button, .product__page__header__buy__button__disable{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid orange;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 130px;
+    width: 200px;
+    background-color: white;
+    font-size: 25px;
+}
+.product__page__header__buy__button__disable{
+    cursor: default;
+}
+.product__page__header__buy__button:hover{
+    background-color: orange;
+    color: white;
+    transition: all .1s;
+}
+
+.product__page__description, .product__page__reviews{
+    margin: 10px 0;
+    font-size: 21px;
+    /*line-height: 25px;*/
+}
+
+/* <-------Reviews----------> */
+
+.product__page__reviews{
+    font-size: 21px;
+}
+.product__page__review__element{
+    margin: 20px 0;
+    padding: 15px 15px;
+    border: 1px solid orange;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.product__page__review__element__img__name{
+    margin-bottom: 5px;
+}
+.product__page__review__element__img img{
+    max-width: 200px;
+}
+.product__page__review__element__inner{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+.product__page__review__element__text{
+    font-size: 17px;
+}
+
