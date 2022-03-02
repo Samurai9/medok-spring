@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  medok-network:
+
+services:
+  database:
+    image: postgres
+    container_name: database
+    expose:
+      - 5432
+    networks:
+      - medok-network
+    environment:
+      - POSTGRES_USER=medok
+      - POSTGRES_PASSWORD=medok
+
+  medok:
+    image: medok:latest
+    container_name: medok
+    ports:
+      - 8080:8080
+    networks:
+      - medok-network
+    depends_on:
+      - database
+    environment:
+      - JDBC_DATABASE_URL=jdbc:postgresql://database:5432/medok
+      - JDBC_DATABASE_USERNAME=medok
+      - JDBC_DATABASE_PASSWORD=medok
