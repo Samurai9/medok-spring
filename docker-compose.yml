@@ -16,6 +16,8 @@ services:
       - POSTGRES_PASSWORD=medok
 
   medok:
+    build:
+      context: .
     image: medok:latest
     container_name: medok
     ports:
