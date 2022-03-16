@@ -8,6 +8,7 @@ class MedokSpringApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }
