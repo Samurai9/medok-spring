@@ -3,6 +3,9 @@ version: '3'
 networks:
   medok-network:
 
+volumes:
+  medokVol:
+
 services:
   database:
     image: postgres
@@ -20,6 +23,8 @@ services:
       context: .
     image: medok:latest
     container_name: medok
+    volumes:
+      - medokVol:/logs/
     ports:
       - 8080:8080
     networks:
@@ -30,3 +35,11 @@ services:
       - JDBC_DATABASE_URL=jdbc:postgresql://database:5432/medok
       - JDBC_DATABASE_USERNAME=medok
       - JDBC_DATABASE_PASSWORD=medok
+
+  promtail:
+    image: grafana/promtail:1.4.1
+    volumes:
+      - medokVol:/var/log/
+      - ${PWD}/promtail/config.yaml:/etc/promtail/promtail.yml
+    command:
+      - '-config.file=/etc/promtail/promtail.yml'
