@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: promtail
+  name: promtail
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: promtail
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: promtail
+    spec:
+      containers:
+        - args:
+            - -config.file=/etc/promtail/config.yaml
+          image: grafana/promtail:1.4.1
+          name: medok-promtail
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/log/
+              name: medok-vol
+            - mountPath: /etc/promtail/
+              name: promtail-claim1
+      restartPolicy: Always
+      volumes:
+        - name: medok-vol
+          persistentVolumeClaim:
+            claimName: medok-vol
+        - name:  promtail-claim1
+          hostPath:
+            path: /etc/promtail/
+        # - name: promtail-claim1
+        #   persistentVolumeClaim:
+        #     claimName: promtail-claim1
+status: {}
