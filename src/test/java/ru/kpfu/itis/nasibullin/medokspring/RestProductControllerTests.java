@@ -16,7 +16,7 @@ import ru.kpfu.itis.nasibullin.medokspring.entities.ProductCategory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureEmbeddedDatabase(beanName = "dataSource", refresh = AutoConfigureEmbeddedDatabase.RefreshMode.AFTER_CLASS)
+@AutoConfigureEmbeddedDatabase(refresh = AutoConfigureEmbeddedDatabase.RefreshMode.AFTER_CLASS)
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RestProductControllerTests {

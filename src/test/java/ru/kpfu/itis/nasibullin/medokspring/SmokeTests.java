@@ -1,5 +1,6 @@
 package ru.kpfu.itis.nasibullin.medokspring;
 
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import ru.kpfu.itis.nasibullin.medokspring.services.user.UserService;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+@AutoConfigureEmbeddedDatabase(refresh = AutoConfigureEmbeddedDatabase.RefreshMode.AFTER_CLASS)
 @SpringBootTest
 public class SmokeTests {
     @Autowired

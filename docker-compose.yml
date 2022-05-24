@@ -7,20 +7,11 @@ volumes:
   medokVol:
 
 services:
-  database:
-    image: postgres
-    container_name: database
-    expose:
-      - 5432
-    networks:
-      - medok-network
-    environment:
-      - POSTGRES_USER=medok
-      - POSTGRES_PASSWORD=medok
-
   medok:
     build:
       context: .
+      args:
+        - appStage=development
     image: medok:latest
     container_name: medok
     volumes:
@@ -30,14 +21,26 @@ services:
     networks:
       - medok-network
     depends_on:
-      - database
+      - medok_database
     environment:
-      - JDBC_DATABASE_URL=jdbc:postgresql://database:5432/medok
+      - JDBC_DATABASE_URL=jdbc:postgresql://medok_database:5432/medok
       - JDBC_DATABASE_USERNAME=medok
       - JDBC_DATABASE_PASSWORD=medok
 
+  medok_database:
+    image: postgres
+    container_name: medok_database
+    expose:
+      - 5432
+    networks:
+      - medok-network
+    environment:
+      - POSTGRES_USER=medok
+      - POSTGRES_PASSWORD=medok
+
   promtail:
     image: grafana/promtail:1.4.1
+    container_name: medok_promtail
     volumes:
       - medokVol:/var/log/
       - ${PWD}/promtail/config.yaml:/etc/promtail/promtail.yml
