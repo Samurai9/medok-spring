@@ -7,6 +7,7 @@ volumes:
   medokVol:
 
 services:
+  #Main app
   medok:
     build:
       context: .
@@ -27,6 +28,7 @@ services:
       - JDBC_DATABASE_USERNAME=medok
       - JDBC_DATABASE_PASSWORD=medok
 
+  #DB for main app
   medok_database:
     image: postgres
     container_name: medok_database
@@ -38,6 +40,34 @@ services:
       - POSTGRES_USER=medok
       - POSTGRES_PASSWORD=medok
 
+  #Local grafana client
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    hostname: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - medok-network
+
+  #DB for metrics
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    hostname: prometheus
+    restart: always
+    volumes:
+      - ${PWD}/promtail/prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - medok-network
+    depends_on:
+      - cadvisor
+      - node-exporter
+
+  #Log collection to loki
   promtail:
     image: grafana/promtail:1.4.1
     container_name: medok_promtail
@@ -46,3 +76,42 @@ services:
       - ${PWD}/promtail/config.yaml:/etc/promtail/promtail.yml
     command:
       - '-config.file=/etc/promtail/promtail.yml'
+
+  #Get mterics from host machine
+  node-exporter:
+    image: quay.io/prometheus/node-exporter
+    container_name: node-exporter
+    hostname: node-exporter
+    restart: always
+    networks:
+      - medok-network
+    # command:
+      # - '--web.listen-address=:9001'
+    expose:
+      - '9100'
+    # ports:
+      # - "9100:9100"
+
+  #Get metrics from docker containers
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /cgroup:/cgroup:ro
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+    privileged: true
+    networks:
+      - medok-network
+    command:
+      - '-port=8081'
+    expose:
+      - '9002'
+    # ports:
+      # - "8081:8081"
