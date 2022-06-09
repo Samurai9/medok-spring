@@ -1,10 +1,13 @@
 version: '3'
 
 networks:
-  medok-network:
+  medok_network:
 
 volumes:
-  medokVol:
+  logs_volume:
+  prometheus_volume:
+  alertmanager_volume:
+  promtail_volume:
 
 services:
   #Main app
@@ -16,7 +19,7 @@ services:
     image: medok:latest
     container_name: medok
     volumes:
-      - medokVol:/logs/
+      - logs_volume:/logs/
     ports:
       - 8080:8080
     networks:
@@ -35,7 +38,7 @@ services:
     expose:
       - 5432
     networks:
-      - medok-network
+      - medok_network
     environment:
       - POSTGRES_USER=medok
       - POSTGRES_PASSWORD=medok
@@ -58,12 +61,12 @@ services:
     hostname: prometheus
     restart: always
     volumes:
-      - ${PWD}/promtail/prometheus.yaml:/etc/prometheus/prometheus.yml
-      - ${PWD}/promtail/alertmanager/rules/:/etc/prometheus/
+      - ./configs/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./configs/alertmanager/rules:/etc/prometheus/alertmanager/rules/
     ports:
       - "9090:9090"
     networks:
-      - medok-network
+      - medok_network
     depends_on:
       - cadvisor
       - node-exporter
@@ -72,9 +75,11 @@ services:
   promtail:
     image: grafana/promtail:1.4.1
     container_name: medok_promtail
+    ports:
+      - "8989:8989"
     volumes:
-      - medokVol:/var/log/
-      - ${PWD}/promtail/config.yaml:/etc/promtail/promtail.yml
+      - logs_volume:/var/log/
+      - ./configs/promtail/promtail-config.yaml:/etc/promtail/promtail.yml
     command:
       - '-config.file=/etc/promtail/promtail.yml'
 
@@ -85,7 +90,7 @@ services:
     hostname: node-exporter
     restart: always
     networks:
-      - medok-network
+      - medok_network
     ports:
       - "9100:9100"
 
@@ -105,7 +110,7 @@ services:
     restart: unless-stopped
     privileged: true
     networks:
-      - medok-network
+      - medok_network
     command:
       - '-port=8081'
     ports:
@@ -118,9 +123,9 @@ services:
     ports:
       - 9093:9093
     volumes:
-      - ${PWD}/alertmanager/:/etc/alertmanager/
+      - ./configs/alertmanager/config.yml:/etc/alertmanager/config.yml
     networks:
-      - medok-network
+      - medok_network
     restart: always
     command:
       - '--config.file=/etc/alertmanager/config.yml'

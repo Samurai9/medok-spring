@@ -40,25 +40,6 @@ groups:
       summary: "Critical: High CPU usage(>100%) on the host {{ $labels.instance }}"
       description: "Host CPU usage is {{ humanize $value}}% on the host {{ $labels.instance }}"
 
-  #- alert: high_cpu_context_switching_non_prod.mydomain.com
-  #  expr: rate(node_context_switches_total{instance!~"server1.mydomain.com.+|server2.mydomain.com.+"}[5m]) > 6000
-  #  for: 5m
-  #  labels:
-  #    severity: warning
-  #  annotations:
-  #    summary: "Warning: High CPU context switching(>6000) on the host {{ $labels.instance }}"
-  #    description: "Host cpu context switching is {{ humanize $value}}"
-
-
-  #- alert: high_cpu_context_switching_prod.mydomain.com
-  #  expr: rate(node_context_switches_total{instance=~"server3.mydomain.com.+|server4.mydomain.com.+"}[5m]) > 45000
-  #  for: 5m
-  #  labels:
-  #    severity: warning
-  #  annotations:
-  #    summary: "Warning: High CPU context switching(>45000) on the host {{ $labels.instance }}"
-  #    description: "Host cpu context switching is {{ humanize $value}}"
-
 
 ########## Memory ##########
   - alert: high_memory_usage
