@@ -43,7 +43,7 @@ services:
   #Local grafana client
   grafana:
     image: grafana/grafana
-    container_name: grafana
+    container_name: medok_grafana
     hostname: grafana
     restart: always
     ports:
@@ -54,11 +54,12 @@ services:
   #DB for metrics
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
+    container_name: medok_prometheus
     hostname: prometheus
     restart: always
     volumes:
       - ${PWD}/promtail/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ${PWD}/promtail/alertmanager/rules/:/etc/prometheus/
     ports:
       - "9090:9090"
     networks:
@@ -80,22 +81,18 @@ services:
   #Get mterics from host machine
   node-exporter:
     image: quay.io/prometheus/node-exporter
-    container_name: node-exporter
+    container_name: medok_node_exporter
     hostname: node-exporter
     restart: always
     networks:
       - medok-network
-    # command:
-      # - '--web.listen-address=:9001'
-    expose:
-      - '9100'
-    # ports:
-      # - "9100:9100"
+    ports:
+      - "9100:9100"
 
   #Get metrics from docker containers
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
+    container_name: medok_cadvisor
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -111,7 +108,20 @@ services:
       - medok-network
     command:
       - '-port=8081'
-    expose:
-      - '9002'
-    # ports:
-      # - "8081:8081"
+    ports:
+      - "8081:8081"
+
+  #Alert manager
+  alertmanager:
+    image: prom/alertmanager
+    container_name: medok_alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - ${PWD}/alertmanager/:/etc/alertmanager/
+    networks:
+      - medok-network
+    restart: always
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
