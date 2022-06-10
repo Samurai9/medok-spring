@@ -1,22 +1,41 @@
+# global:
+#   smtp_smarthost: 'smtp.sendgrid.net:25'
+#   smtp_from: 'root@localhost'
+#   smtp_auth_username: 'username'
+#   smtp_auth_password: 'password'
+# route:
+#   group_by: ['alertname']
+#   group_wait: 30s
+#   group_interval: 30s
+#   repeat_interval: 1h
+#   receiver: jm-alerts
+
+#   routes:
+#   - match:
+#       job: prometheus
+#     receiver: jm-alerts
+#     repeat_interval: 1h
+
+# receivers:
+# - name: 'jm-alerts'
+#   email_configs:
+#   - to: 'naserik99@mail.ru'
+
 global:
-  smtp_smarthost: 'smtp.sendgrid.net:25'
-  smtp_from: 'root@localhost'
-  smtp_auth_username: 'username'
-  smtp_auth_password: 'password'
+  resolve_timeout: 5m
 route:
   group_by: ['alertname']
   group_wait: 30s
   group_interval: 30s
-  repeat_interval: 1h
-  receiver: jm-alerts
-
-  routes:
-  - match:
-      job: prometheus
-    receiver: jm-alerts
-    repeat_interval: 1h
-
+  repeat_interval: 5m
+  receiver: 'web.hook'
 receivers:
-- name: 'jm-alerts'
-  email_configs:
-  - to: 'naserik99@mail.ru'
+- name: 'web.hook'
+  webhook_configs:
+  - url: 'http://alert_bot:9087/alert/319731028'
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']

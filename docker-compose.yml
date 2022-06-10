@@ -23,7 +23,7 @@ services:
     ports:
       - 8080:8080
     networks:
-      - medok-network
+      - medok_network
     depends_on:
       - medok_database
     environment:
@@ -52,7 +52,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - medok-network
+      - medok_network
 
   #DB for metrics
   prometheus:
@@ -69,7 +69,7 @@ services:
       - medok_network
     depends_on:
       - cadvisor
-      - node-exporter
+      - node_exporter
 
   #Log collection to loki
   promtail:
@@ -84,7 +84,7 @@ services:
       - '-config.file=/etc/promtail/promtail.yml'
 
   #Get mterics from host machine
-  node-exporter:
+  node_exporter:
     image: quay.io/prometheus/node-exporter
     container_name: medok_node_exporter
     hostname: node-exporter
@@ -130,3 +130,18 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
+
+  #Bot for notify alerts in telegram
+  alert_bot:
+    image: lorien/incaller-prometheus-telegram-bot
+    container_name: medok_alert_bot
+    volumes:
+      - ./configs/telegrambot/:/etc/telegrambot/
+      - ./configs/telegrambot/config.yaml:/config.yaml  
+    restart: always
+    depends_on:
+      - alertmanager
+    ports:
+      - 9087:9087
+    networks:
+      - medok_network
