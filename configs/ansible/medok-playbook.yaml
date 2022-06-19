@@ -47,6 +47,12 @@
       dest: ~/medok/
       clone: yes
       update: yes
+
+  - name: deploy Docker Compose stack
+    community.docker.docker_compose:
+      project_src: ~/medok/
+      files:
+      - docker-compose.yml
   # - name: create directory for project
   #   file:
   #     path: ~/medok
