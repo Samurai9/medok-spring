@@ -2,56 +2,94 @@ groups:
 - name: containers
   rules:
  
-  - alert: Some container is down on the host server1
+  - alert: Medok container is down
     expr: 
-        absent (container_start_time_seconds{image!="",instance="server1.mydomain.com:8888",name=~".+mysql.+"} )
-    for: 1m
+      absent(container_start_time_seconds{name="medok"})
+    for: 30s
     labels:
-      severity: critical
+      severity: Critical
     annotations:
-      summary: "Critical: Some container is down on the host {{ $labels.instance }} for more than 1 minutes"
-      description: "Some container is down on the host {{ $labels.instance }}"
+      summary: "Critical: Medok container is down for more than 30 seconds"
+      description: "Medok container is down"
+
+  - alert: Database container is down
+    expr: 
+      absent(container_start_time_seconds{name="medok_database"})
+    for: 30s
+    labels:
+      severity: Critical
+    annotations:
+      summary: "Critical: Database container is down for more than 30 seconds"
+      description: "Database container is down"
   
-
-  - alert: Some container is down on the host server2
-    expr: 
-        absent (container_start_time_seconds{image!="",instance="server2.mydomain.com:8888",name=~".+redis.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server2.mydomain.com:8888",name=~".+nginx.+"} )
-    for: 1m
+  - alert: Container is down
+    expr:
+      absent(container_start_time_seconds{name="medok_grafana"})
+    for: 30s
     labels:
-      severity: critical
+      severity: "Critical"
     annotations:
-      summary: "Critical: Some container is down on the host {{ $labels.instance }} for more than 1 minutes"
-      description: "Some container is down on the host {{ $labels.instance }}"
+      summary: "Critical: Grafana container is down for more than 30 seconds"
+      description: "Grafana container is down"
+      name: "Grafana container is down"
 
-
-  - alert: Some container is down on the host server3
+  - alert: Prometheus container is down
     expr: 
-        absent (container_start_time_seconds{image!="",instance="server3.mydomain.com:8888",name=~".+nginx.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server3.mydomain.com:8888",name=~".+php-fpm.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server3.mydomain.com:8888",name=~".+redis.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server3.mydomain.com:8888",name=~".+varnish.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server3.mydomain.com:8888",name=~".+mysql.+"} ) 
-    for: 1m
+      absent(container_start_time_seconds{name="medok_prometheus"})
+    for: 30s
     labels:
-      severity: critical
+      severity: Critical
     annotations:
-      summary: "Critical: Some container is down on the host {{ $labels.instance }} for more than 1 minutes"
-      description: "Some container is down on the host {{ $labels.instance }}"
+      summary: "Critical: Prometheus container is down for more than 30 seconds"
+      description: "Prometheus container is down"
 
-  
-
-  - alert: Some container is down on the host server4
+  - alert: Container is down
     expr: 
-        absent (container_start_time_seconds{image!="",instance="server4:8888",name=~".+beanstalkd.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server4:8888",name=~".+nginx.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server4:8888",name=~".+php-fpm.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server4:8888",name=~".+php-worker.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server4:8888",name=~".+redis.+"} ) or
-        absent (container_start_time_seconds{image!="",instance="server4:8888",name=~".+mysql.+"} )
-    for: 1m
+      absent(container_start_time_seconds{name="medok_promtail"})
+    for: 30s
     labels:
-      severity: critical
+      severity: Critical
     annotations:
-      summary: "Critical: Some container is down on the host {{ $labels.instance }} for more than 1 minutes"
-      description: "Some container is down on the host {{ $labels.instance }}"
+      summary: "Critical: Promtail container is down for more than 30 seconds"
+      description: "Promtail container is down"
+      name: "Promtail container is down"
+
+  - alert: Node Exporter container is down
+    expr: 
+      absent(container_start_time_seconds{name="medok_node_exporter"})
+    for: 30s
+    labels:
+      severity: Critical
+    annotations:
+      summary: "Critical: Node Exporter container is down for more than 30 seconds"
+      description: "Node Exporter container is down"
+
+  - alert: Cadvisor container is down
+    expr: 
+      absent(container_start_time_seconds{name="medok_cadvisor"})
+    for: 30s
+    labels:
+      severity: Critical
+    annotations:
+      summary: "Critical: Cadvisor container is down for more than 30 seconds"
+      description: "Cadvisor container is down"
+
+  - alert: Alertmanager container is down
+    expr: 
+      absent(container_start_time_seconds{name="medok_alertmanager"})
+    for: 30s
+    labels:
+      severity: Critical
+    annotations:
+      summary: "Critical: Alertmanager container is down for more than 30 seconds"
+      description: "Alertmanager container is down"
+
+  - alert: Alert Bot container is down
+    expr: 
+      absent(container_start_time_seconds{name="medok_alert_bot"})
+    for: 30s
+    labels:
+      severity: Critical
+    annotations:
+      summary: "Critical: Alert Bot container is down for more than 30 seconds"
+      description: "Alert Bot container is down"

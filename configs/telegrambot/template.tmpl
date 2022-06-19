@@ -1,6 +1,40 @@
-Type: {{.CommonAnnotations.description}}
-Summary: {{.CommonAnnotations.summary}}
-Alertname: {{ .CommonLabels.alertname }}
-Instance: {{ .CommonLabels.instance }}
-Serverity: {{ .CommonLabels.serverity}}
-Status:  {{ .Status }}
+
+<b>Grouped for:</b>
+{{ range $key,$val := .GroupLabels -}}
+    <i>{{$key}}</i> = <code>{{$val}}</code>
+{{ end -}}
+
+{{if eq .Status "firing"}}
+<i>Status:</i> <b>{{.Status | str_UpperCase}} 🔥</b>
+{{end -}}
+
+{{if eq .Status "resolved"}}
+<i>Status:</i> <b>{{.Status | str_UpperCase}} ✅</b>
+{{end }}
+<b>Active Alert List:</b>
+-----------------------------------------------------
+{{- range $val := .Alerts }}
+  <b><i>Alert:</i></b> {{ index $val.Annotations "name" }}
+  {{if HasKey $val.Annotations "measureUnit" -}}<b><i>Current value:</i></b> 
+  {{str_Format_MeasureUnit (index $val.Annotations "measureUnit") (index $val.Annotations "value")}}
+  {{else -}}
+  {{if HasKey $val.Annotations "value" -}} 
+  {{ index $val.Annotations "value" | str_FormatFloat}}
+  {{end -}}
+  {{end -}}
+  {{$severity := index $val.Labels "severity" -}}
+  {{if eq $severity "Warning" -}}
+  <b><i>Severity:</i></b> {{$severity}} ⚠️
+  {{else if eq $severity "Critical" -}}
+  <b><i>Severity:</i></b> {{$severity}} 🚨
+  {{else -}}
+  <b><i>Severity:</i></b> {{$severity}}
+  {{end -}}
+  <b><i>Active from:</i></b> {{ $val.StartsAt | str_FormatDate -}}
+  {{ range $key, $value := $val.Annotations -}}
+  {{ if and (and (ne $key "name") (ne $key "value")) (ne $key "measureUnit") }}
+  <b><i>{{$key}}:</i></b> {{$value}}
+  {{- end -}}
+{{- end }}
+-----------------------------------------------------
+{{- end -}}
