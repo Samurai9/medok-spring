@@ -1,0 +1,68 @@
+- hosts: medok-server
+
+  tasks:
+  - name: Install packages for downloading docker
+    apt:
+      name: ['apt-transport-https','ca-certificates', 'curl', 'software-properties-common']
+      state: present
+      update_cache: yes
+    tags:
+      - docker
+
+  - name: Add Docker s GPG key for ubuntu from official site
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+    tags:
+      - docker
+
+  - name: add docker repository to apt
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu focal stable
+      state: present
+    tags:
+      - docker
+
+  - name: Update apt packages
+    apt:
+      update_cache: yes
+    tags:
+      - docker
+
+  - name: install docker
+    apt:
+      name: "{{item}}"
+      state: latest
+      update_cache: yes
+    loop:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    tags:
+      - docker
+
+  - name: Clone a github medok repository
+    git:
+      repo: https://github.com/Samurai9/medok-spring.git
+      dest: ~/medok/
+      clone: yes
+      update: yes
+  # - name: create directory for project
+  #   file:
+  #     path: ~/medok
+  #     state: directory
+  #     owner: root
+  #     group: root
+  #     mode: 0775
+
+  # - name: copy docker-compose file
+  #   ansible.builtin.copy:
+  #     src: ./../medok-spring/docker-compose.yml
+  #     dest: ~/medok/docker-compose.yml
+  #     owner: root
+  #     group: root
+  #     mode: 0775
+
+    
+    # - name: clone medok repository
+    #   ansible.builtin.command: git clone https://github.com/Samurai9/medok-spring.git
