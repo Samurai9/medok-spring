@@ -6,14 +6,15 @@ metadata:
     kompose.version: 1.26.1 (a9d05d509)
   creationTimestamp: null
   labels:
-    io.kompose.service: medok
-  name: medok
+    io.kompose.service: nginx
+  name: nginx
 spec:
   ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
+    - name: "80"
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
   selector:
-    io.kompose.service: medok
+    io.kompose.service: nginx
 status:
   loadBalancer: {}

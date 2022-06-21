@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/medok-network: "true"
+        io.kompose.service: nginx
+    spec:
+      containers:
+        - image: nginx:1.13
+          name: medok-nginx
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx-claim0
+      restartPolicy: Always
+      volumes:
+        - name:  nginx-claim0
+          hostPath:
+            path: /configs/nginx/nginx.conf
+status: {}

@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.26.1 (a9d05d509)
   creationTimestamp: null
   labels:
-    io.kompose.service: medok
-  name: medok
+    io.kompose.service: alertmanager
+  name: alertmanager
 spec:
   ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
+    - name: "9093"
+      port: 9093
+      targetPort: 9093
   selector:
-    io.kompose.service: medok
+    io.kompose.service: alertmanager
 status:
   loadBalancer: {}

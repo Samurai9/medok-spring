@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.26.1 (a9d05d509)
   creationTimestamp: null
   labels:
-    io.kompose.service: medok
-  name: medok
+    io.kompose.service: grafana
+  name: grafana
 spec:
   ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
+    - name: "3000"
+      port: 3000
+      targetPort: 3000
   selector:
-    io.kompose.service: medok
+    io.kompose.service: grafana
 status:
   loadBalancer: {}

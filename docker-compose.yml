@@ -1,13 +1,10 @@
 version: '3'
 
 networks:
-  medok_network:
+  medok-network:
 
 volumes:
-  logs_volume:
-  prometheus_volume:
-  alertmanager_volume:
-  promtail_volume:
+  logs-volume:
 
 services:
   #Main app
@@ -17,57 +14,57 @@ services:
     image: medok:latest
     container_name: medok
     volumes:
-      - logs_volume:/logs/
+      - logs-volume:/logs/
     expose:
       - 8080
     networks:
-      - medok_network
+      - medok-network
     depends_on:
-      - medok_database
+      - medok-database
     environment:
-      - JDBC_DATABASE_URL=jdbc:postgresql://medok_database:5432/medok
+      - JDBC_DATABASE_URL=jdbc:postgresql://medok-database:5432/medok
       - JDBC_DATABASE_USERNAME=medok
       - JDBC_DATABASE_PASSWORD=medok
 
   #DB for main app
-  medok_database:
+  medok-database:
     image: postgres
-    container_name: medok_database
+    container_name: medok-database
     expose:
       - 5432
     networks:
-      - medok_network
+      - medok-network
     environment:
       - POSTGRES_USER=medok
       - POSTGRES_PASSWORD=medok
 
   #Nginx
   nginx:
-    container_name: medok_nginx
+    container_name: medok-nginx
     image: nginx:1.13
     restart: always
     ports:
       - 80:80
     networks:
-      - medok_network
+      - medok-network
     volumes:
       - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
 
   #Local grafana client
   grafana:
     image: grafana/grafana
-    container_name: medok_grafana
+    container_name: medok-grafana
     hostname: grafana
     restart: always
     ports:
       - "3000:3000"
     networks:
-      - medok_network
+      - medok-network
 
   #DB for metrics
   prometheus:
     image: prom/prometheus
-    container_name: medok_prometheus
+    container_name: medok-prometheus
     hostname: prometheus
     restart: always
     volumes:
@@ -76,17 +73,17 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - medok_network
+      - medok-network
     depends_on:
       - cadvisor
-      - node_exporter
+      - node-exporter
 
   #Log collection to grafana cloud
   promtail:
     image: grafana/promtail:1.4.1
-    container_name: medok_promtail
+    container_name: medok-promtail
     volumes:
-      - logs_volume:/var/log/
+      - logs-volume:/var/log/
       - ./configs/promtail/promtail-config.yaml:/etc/promtail/promtail.yml
     command:
       - '-config.file=/etc/promtail/promtail.yml'
@@ -94,30 +91,30 @@ services:
   #Local log collection
   loki:
     image: grafana/loki:2.5.0
-    container_name: medok_loki
+    container_name: medok-loki
     ports:
       - "3100:3100"
     volumes:
       - ./configs/loki/config.yaml:/etc/loki/config.yaml
     command: -config.file=/etc/loki/config.yaml
     networks:
-      - medok_network
+      - medok-network
 
   #Get mterics from host machine
-  node_exporter:
+  node-exporter:
     image: quay.io/prometheus/node-exporter
-    container_name: medok_node_exporter
+    container_name: medok-node-exporter
     hostname: node-exporter
     restart: always
     networks:
-      - medok_network
+      - medok-network
     ports:
       - "9100:9100"
 
   #Get metrics from docker containers
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
-    container_name: medok_cadvisor
+    container_name: medok-cadvisor
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -130,7 +127,7 @@ services:
     restart: unless-stopped
     privileged: true
     networks:
-      - medok_network
+      - medok-network
     command:
       - '-port=8081'
     ports:
@@ -139,22 +136,22 @@ services:
   #Alert manager
   alertmanager:
     image: prom/alertmanager
-    container_name: medok_alertmanager
+    container_name: medok-alertmanager
     ports:
       - 9093:9093
     volumes:
       - ./configs/alertmanager/config.yml:/etc/alertmanager/config.yml
     networks:
-      - medok_network
+      - medok-network
     restart: always
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
 
   #Bot for notify alerts in telegram
-  alert_bot:
+  alert-bot:
     image: lorien/incaller-prometheus-telegram-bot
-    container_name: medok_alert_bot
+    container_name: medok-alert-bot
     volumes:
       - ./configs/telegrambot/:/etc/telegrambot/
       - ./configs/telegrambot/config.yaml:/config.yaml  
@@ -164,4 +161,4 @@ services:
     ports:
       - 9087:9087
     networks:
-      - medok_network
+      - medok-network

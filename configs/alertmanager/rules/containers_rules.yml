@@ -2,7 +2,7 @@ groups:
 - name: containers
   rules:
  
-  - alert: Medok container is down
+  - alert: Container is down
     expr: 
       absent(container_start_time_seconds{name="medok"})
     for: 30s
@@ -12,9 +12,9 @@ groups:
       summary: "Critical: Medok container is down for more than 30 seconds"
       description: "Medok container is down"
 
-  - alert: Database container is down
+  - alert: Container is down
     expr: 
-      absent(container_start_time_seconds{name="medok_database"})
+      absent(container_start_time_seconds{name="medok-database"})
     for: 30s
     labels:
       severity: Critical
@@ -24,7 +24,7 @@ groups:
   
   - alert: Container is down
     expr:
-      absent(container_start_time_seconds{name="medok_grafana"})
+      absent(container_start_time_seconds{name="medok-grafana"})
     for: 30s
     labels:
       severity: "Critical"
@@ -33,9 +33,9 @@ groups:
       description: "Grafana container is down"
       name: "Grafana container is down"
 
-  - alert: Prometheus container is down
+  - alert: Container is down
     expr: 
-      absent(container_start_time_seconds{name="medok_prometheus"})
+      absent(container_start_time_seconds{name="medok-prometheus"})
     for: 30s
     labels:
       severity: Critical
@@ -45,7 +45,7 @@ groups:
 
   - alert: Container is down
     expr: 
-      absent(container_start_time_seconds{name="medok_promtail"})
+      absent(container_start_time_seconds{name="medok-promtail"})
     for: 30s
     labels:
       severity: Critical
@@ -54,9 +54,9 @@ groups:
       description: "Promtail container is down"
       name: "Promtail container is down"
 
-  - alert: Node Exporter container is down
+  - alert: Container is down
     expr: 
-      absent(container_start_time_seconds{name="medok_node_exporter"})
+      absent(container_start_time_seconds{name="medok-node-exporter"})
     for: 30s
     labels:
       severity: Critical
@@ -64,9 +64,9 @@ groups:
       summary: "Critical: Node Exporter container is down for more than 30 seconds"
       description: "Node Exporter container is down"
 
-  - alert: Cadvisor container is down
+  - alert: Container is down
     expr: 
-      absent(container_start_time_seconds{name="medok_cadvisor"})
+      absent(container_start_time_seconds{name="medok-cadvisor"})
     for: 30s
     labels:
       severity: Critical
@@ -74,9 +74,9 @@ groups:
       summary: "Critical: Cadvisor container is down for more than 30 seconds"
       description: "Cadvisor container is down"
 
-  - alert: Alertmanager container is down
+  - alert: Container is down
     expr: 
-      absent(container_start_time_seconds{name="medok_alertmanager"})
+      absent(container_start_time_seconds{name="medok-alertmanager"})
     for: 30s
     labels:
       severity: Critical
@@ -84,9 +84,9 @@ groups:
       summary: "Critical: Alertmanager container is down for more than 30 seconds"
       description: "Alertmanager container is down"
 
-  - alert: Alert Bot container is down
+  - alert: Container is down
     expr: 
-      absent(container_start_time_seconds{name="medok_alert_bot"})
+      absent(container_start_time_seconds{name="medok-alert-bot"})
     for: 30s
     labels:
       severity: Critical

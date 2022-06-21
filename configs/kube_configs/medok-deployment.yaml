@@ -40,10 +40,10 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /logs/
-              name: medok-vol
+              name: logs-volume
       restartPolicy: Always
       volumes:
-        - name: medok-vol
+        - name: logs-volume
           persistentVolumeClaim:
-            claimName: medok-vol
+            claimName: logs-volume
 status: {}

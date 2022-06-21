@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cadvisor
+  name: cadvisor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cadvisor
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/medok-network: "true"
+        io.kompose.service: cadvisor
+    spec:
+      containers:
+        - args:
+            - -port=8081
+          image: gcr.io/cadvisor/cadvisor:latest
+          name: medok-cadvisor
+          ports:
+            - containerPort: 8081
+          resources: {}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /rootfs
+              name: cadvisor-claim0
+            - mountPath: /var/run
+              name: cadvisor-claim1
+            - mountPath: /sys
+              name: cadvisor-claim2
+            - mountPath: /var/lib/docker
+              name: cadvisor-claim3
+            - mountPath: /dev/disk
+              name: cadvisor-claim4
+            - mountPath: /cgroup
+              name: cadvisor-claim5
+      restartPolicy: Always
+      volumes:
+        - name: cadvisor-claim0
+          hostPath:
+            path: /
+        - name: cadvisor-claim1
+          hostPath:
+            path: /var/run
+        - name: cadvisor-claim2
+          hostPath:
+            path: /sys
+        - name: cadvisor-claim3
+          hostPath:
+            path: /var/lib/docker/
+        - name: cadvisor-claim4
+          hostPath:
+            path: /dev/disk/
+        - name: cadvisor-claim5
+          hostPath:
+            path: /cgroup
+status: {}
