@@ -78,7 +78,7 @@ services:
       - cadvisor
       - node-exporter
 
-  #Log collection to grafana cloud
+  #Log analysis 
   promtail:
     image: grafana/promtail:1.4.1
     container_name: medok-promtail
@@ -88,7 +88,7 @@ services:
     command:
       - '-config.file=/etc/promtail/promtail.yml'
 
-  #Local log collection
+  #Log collection
   loki:
     image: grafana/loki:2.5.0
     container_name: medok-loki

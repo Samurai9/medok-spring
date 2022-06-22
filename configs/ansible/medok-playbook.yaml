@@ -53,22 +53,3 @@
       project_src: ~/medok/
       files:
       - docker-compose.yml
-  # - name: create directory for project
-  #   file:
-  #     path: ~/medok
-  #     state: directory
-  #     owner: root
-  #     group: root
-  #     mode: 0775
-
-  # - name: copy docker-compose file
-  #   ansible.builtin.copy:
-  #     src: ./../medok-spring/docker-compose.yml
-  #     dest: ~/medok/docker-compose.yml
-  #     owner: root
-  #     group: root
-  #     mode: 0775
-
-    
-    # - name: clone medok repository
-    #   ansible.builtin.command: git clone https://github.com/Samurai9/medok-spring.git

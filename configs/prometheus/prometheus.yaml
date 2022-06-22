@@ -7,7 +7,6 @@ global:
 rule_files:
     - "alertmanager/rules/containers_rules.yml"
     - "alertmanager/rules/host_rules.yml"
-    - "alertmanager/rules/test_rules.yml"
 
 scrape_configs:
   - job_name: 'prometheus'
