@@ -20,6 +20,5 @@ RUN mvn -f $APP_PATH/pom.xml clean package
 
 # create image
 FROM openjdk:8-jdk-alpine
-EXPOSE 8080
-ADD target/medok-spring-1.0.jar medok-spring-1.0.jar
+COPY --from=build /home/app/target/medok-spring-1.0.jar medok-spring-1.0.jar
 ENTRYPOINT ["java","-jar","/medok-spring-1.0.jar"]
